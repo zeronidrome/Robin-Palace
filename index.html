@@ -38,8 +38,10 @@
                 <div class="time-info" id="time-display">0:00 / 0:00</div>
                 
                 <div class="player-controls">
+                    <button onclick="prevMusic()"><i class="fas fa-backward"></i></button>
                     <button onclick="toggleMusic()" id="play-btn"><i class="fas fa-play"></i></button>
                     <button onclick="stopMusic()"><i class="fas fa-stop"></i></button>
+                    <button onclick="nextMusic()"><i class="fas fa-forward"></i></button>
                 </div>
             </div>
         </div>
@@ -55,34 +57,34 @@
     </nav>
 
     <div id="about-overlay" class="p3r-overlay" onclick="closeSection('about-overlay')">
-        <div class="p3r-card" onclick="event.stopPropagation()">
+        <div class="p3r-card panel-top" onclick="event.stopPropagation()">
             <div class="card-content">
                 <h2 class="title">MUQORROBIN HASIR - MANAJEMEN INFORMATIKA</h2>
                 <p>Seorang mahasiswa biasa. Suka ngegame, design, dan vibes koding (malas ngoding)</p>
-                <button class="back-btn" onclick="closeSection('about-overlay')">BACK</button>
             </div>
         </div>
     </div>
 
     <div id="skills-overlay" class="p3r-overlay" onclick="closeSection('skills-overlay')">
-        <div class="p3r-card" onclick="event.stopPropagation()">
+        <div class="p3r-card panel-bottom-stats" onclick="event.stopPropagation()">
             <div class="card-content">
-                <h2 class="title">SOCIAL STATS</h2>
-                <div class="stat-bar"><div class="stat-label"><span>WRITING</span><span>99%</span></div><div class="bar"><div class="fill" data-width="99%"></div></div></div>
-                <div class="stat-bar"><div class="stat-label"><span>GAMING</span><span>MAX</span></div><div class="bar"><div class="fill blue" data-width="100%"></div></div></div>
-                <div class="stat-bar"><div class="stat-label"><span>CODING</span><span>MALAS</span></div><div class="bar"><div class="fill" data-width="5%"></div></div></div>
-                <div class="stat-bar"><div class="stat-label"><span>DESAIN</span><span>KALO MOOD</span></div><div class="bar"><div class="fill" data-width="50%"></div></div></div>
-                <div class="stat-bar"><div class="stat-label"><span>PUBLIC SPEAKING</span><span>BOROS BATRE</span></div><div class="bar"><div class="fill" data-width="20%"></div></div></div>
-                <button class="back-btn" onclick="closeSection('skills-overlay')">BACK</button>
+                <h2 class="title" style="align-self: center;">SOCIAL STATS</h2>
+                <div style="max-width: 800px; width: 100%; margin: 0 auto;">
+                    <div class="stat-bar"><div class="stat-label"><span>WRITING</span><span>99%</span></div><div class="bar"><div class="fill" data-width="99%"></div></div></div>
+                    <div class="stat-bar"><div class="stat-label"><span>GAMING</span><span>MAX</span></div><div class="bar"><div class="fill blue" data-width="100%"></div></div></div>
+                    <div class="stat-bar"><div class="stat-label"><span>CODING</span><span>MALAS</span></div><div class="bar"><div class="fill" data-width="5%"></div></div></div>
+                    <div class="stat-bar"><div class="stat-label"><span>DESAIN</span><span>KALO MOOD</span></div><div class="bar"><div class="fill" data-width="50%"></div></div></div>
+                    <div class="stat-bar"><div class="stat-label"><span>PUBLIC SPEAKING</span><span>BOROS BATRE</span></div><div class="bar"><div class="fill" data-width="20%"></div></div></div>
+                </div>
             </div>
         </div>
     </div>
 
     <div id="projects-overlay" class="p3r-overlay" onclick="closeSection('projects-overlay')">
-        <div class="p3r-card" onclick="event.stopPropagation()">
+        <div class="p3r-card panel-left" onclick="event.stopPropagation()">
             <div class="card-content">
                 <h2 class="title">MISSION LOG</h2>
-                <div class="project-list">
+                <div class="project-list" style="flex-grow: 1;">
                     <div class="project-item" onclick="openNovel('assets/files/Beyond.pdf')">
                         <h3>BEYOND</h3>
                         <p>Chapter 1-8. Click to Read Online.</p>
@@ -91,13 +93,13 @@
                     <div class="project-item"><h3>BEYOND: THE DISGRACE</h3><p>when when</p></div>
                     <div class="project-item"><h3>LUCYD</h3><p>when when</p></div>
                 </div>
-                <button class="back-btn" onclick="closeSection('projects-overlay')">BACK</button>
+                <button class="back-btn" style="margin-top:auto;" onclick="closeSection('projects-overlay')"><i class="fas fa-angle-left"></i></button>
             </div>
         </div>
     </div>
 
     <div id="contact-overlay" class="p3r-overlay" onclick="closeSection('contact-overlay')">
-        <div class="p3r-card" onclick="event.stopPropagation()">
+        <div class="p3r-card panel-bottom" onclick="event.stopPropagation()">
             <div class="card-content">
                 <h2 class="title">SOCIAL LINK</h2>
                 <div class="contact-list">
@@ -111,7 +113,6 @@
                         <div class="contact-icon">EM</div><span>My Email</span>
                     </a>
                 </div>
-                <button class="back-btn" onclick="closeSection('contact-overlay')">BACK</button>
             </div>
         </div>
     </div>
@@ -136,6 +137,8 @@
         const timeDisplay = document.getElementById('time-display');
         const playerPanel = document.getElementById('player-panel');
         const headIcon = document.getElementById('head-icon');
+
+        let sectionTimers = {};
 
         function playClick() { sfx.currentTime = 0; sfx.play(); }
 
@@ -180,18 +183,35 @@
             playBtn.innerHTML = '<i class="fas fa-play"></i>';
         }
 
+        function nextMusic() {
+            playClick();
+            let items = document.querySelectorAll('.song-item');
+            if (items.length === 0) return;
+            let current = Array.from(items).findIndex(i => i.classList.contains('playing'));
+            if (current === -1) current = 0;
+            let next = (current + 1) % items.length;
+            items[next].click();
+        }
+
+        function prevMusic() {
+            playClick();
+            let items = document.querySelectorAll('.song-item');
+            if (items.length === 0) return;
+            let current = Array.from(items).findIndex(i => i.classList.contains('playing'));
+            if (current === -1) current = 0;
+            let prev = (current - 1 + items.length) % items.length;
+            items[prev].click();
+        }
+
         window.addEventListener('keydown', (e) => { 
-            if (e.code === "Space") { 
+            if (e.code === "Space" && e.target === document.body) { 
                 e.preventDefault(); 
                 toggleMusic(); 
             } 
         });
 
         bgm.onended = () => {
-            let items = document.querySelectorAll('.song-item');
-            let current = Array.from(items).findIndex(i => i.classList.contains('playing'));
-            let next = (current + 1) % items.length;
-            items[next].click();
+            nextMusic();
         };
 
         bgm.ontimeupdate = () => {
@@ -211,6 +231,8 @@
         function openSection(id) {
             playClick();
             const overlay = document.getElementById(id);
+            clearTimeout(sectionTimers[id]); 
+            
             overlay.style.display = 'flex';
             setTimeout(() => {
                 overlay.querySelector('.p3r-card').classList.add('show');
@@ -218,6 +240,7 @@
                     overlay.querySelectorAll('.fill').forEach(f => f.style.width = f.getAttribute('data-width')); 
                 }
             }, 10);
+
             document.querySelector('.p3r-menu').style.opacity = '0.2';
             document.querySelector('.p3r-menu').style.pointerEvents = 'none';
         }
@@ -226,9 +249,15 @@
             playClick();
             const overlay = document.getElementById(id);
             overlay.querySelector('.p3r-card').classList.remove('show');
-            setTimeout(() => { 
+            
+            clearTimeout(sectionTimers[id]); 
+            sectionTimers[id] = setTimeout(() => { 
                 overlay.style.display = 'none'; 
-            }, 600);
+                if(id === 'skills-overlay') {
+                    overlay.querySelectorAll('.fill').forEach(f => f.style.width = '0'); 
+                }
+            }, 600); 
+
             document.querySelector('.p3r-menu').style.opacity = '1';
             document.querySelector('.p3r-menu').style.pointerEvents = 'auto';
         }
