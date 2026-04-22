@@ -18,6 +18,7 @@
     <audio id="click-sfx" src="assets/sounds/click.mp3"></audio>
     <audio id="bgm-player"></audio>
 
+    <div class="gallery-toggle" onclick="openGallery()"><i class="fas fa-book"></i></div>
     <div class="headphone-toggle" id="head-icon" onclick="togglePlayer(event)">🎧</div>
 
     <div class="music-panel" id="player-panel" onclick="event.stopPropagation()">
@@ -127,6 +128,40 @@
                 <iframe id="novel-iframe" src="" frameborder="0"></iframe>
             </div>
         </div>
+    </div>
+
+    <div id="gallery-overlay" class="p3r-overlay-center" style="z-index: 2000; display: none;">
+        <div class="book-scene">
+            <div class="book" id="art-book" onclick="openBook()">
+                
+                <div class="book-cover">
+                    <div class="cover-front">
+                        <h1 style="font-size: 3rem; margin: 0; text-align: center;">MY ART</h1>
+                        <p style="margin-top: 10px; font-size: 1.2rem; color: #a1887f;">Tap to Open</p>
+                    </div>
+                    <div class="cover-back"></div>
+                </div>
+
+                <div class="book-page" onclick="event.stopPropagation()">
+                    <div class="bookmark-close" onclick="closeGallery()" title="Close Gallery"><i class="fas fa-times"></i></div>
+                    
+                    <h2 style="color: #3e2723; border-bottom: 3px solid #3e2723; padding-bottom: 10px; margin-top: 0; padding-left: 30px;">MY ARTWORKS</h2>
+                    <div class="gallery-grid">
+                        <img src="assets/galery/MI-fikasi1.png" onclick="openLightbox(this.src)">
+                        <img src="assets/galery/MI-fikasi2.png" onclick="openLightbox(this.src)">
+                        <img src="assets/galery/Nathan.png" onclick="openLightbox(this.src)">
+                        <img src="assets/galery/Req1.png" onclick="openLightbox(this.src)">
+                        <img src="assets/galery/bebeb Agnes.png onclick="openLightbox(this.src)">
+                        <img src="assets/galery/Alexis 2.png" onclick="openLightbox(this.src)">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="lightbox-overlay" class="p3r-overlay-center" style="z-index: 3000; display: none; background: rgba(0,0,0,0.95);" onclick="closeLightbox()">
+        <p style="position: absolute; top: 20px; color: #fff; font-size: 1.2rem; letter-spacing: 2px;">CLICK IMAGE TO ZOOM IN/OUT</p>
+        <img id="lightbox-img" src="" style="max-width: 85vw; max-height: 85vh; border: 5px solid #fff; box-shadow: 0 0 30px #00aaff; transition: transform 0.4s ease; cursor: zoom-in;" onclick="toggleZoom(event)">
     </div>
 
     <script>
@@ -276,6 +311,61 @@
             const iframe = document.getElementById('novel-iframe');
             iframe.src = "";
             reader.style.display = 'none';
+        }
+
+        // --- ART GALLERY FUNCTIONS ---
+        function openGallery() {
+            playClick();
+            document.getElementById('gallery-overlay').style.display = 'flex';
+        }
+
+        function closeGallery() {
+            playClick();
+            document.getElementById('gallery-overlay').style.display = 'none';
+            setTimeout(() => {
+                document.getElementById('art-book').classList.remove('is-open');
+            }, 300);
+        }
+
+        function openBook() {
+            if (!document.getElementById('art-book').classList.contains('is-open')) {
+                playClick();
+                document.getElementById('art-book').classList.add('is-open');
+            }
+        }
+
+        // --- LIGHTBOX ZOOM FUNCTIONS ---
+        let isZoomed = false;
+
+        function openLightbox(src) {
+            playClick();
+            const lightbox = document.getElementById('lightbox-overlay');
+            const img = document.getElementById('lightbox-img');
+            img.src = src;
+            img.style.transform = 'scale(1)'; 
+            img.style.cursor = 'zoom-in';
+            isZoomed = false;
+            lightbox.style.display = 'flex';
+        }
+
+        function closeLightbox() {
+            playClick();
+            document.getElementById('lightbox-overlay').style.display = 'none';
+        }
+
+        function toggleZoom(e) {
+            e.stopPropagation(); 
+            playClick();
+            const img = document.getElementById('lightbox-img');
+            if (!isZoomed) {
+                img.style.transform = 'scale(1.8)';
+                img.style.cursor = 'zoom-out';
+                isZoomed = true;
+            } else {
+                img.style.transform = 'scale(1)';
+                img.style.cursor = 'zoom-in';
+                isZoomed = false;
+            }
         }
     </script>
 </body>

@@ -48,7 +48,6 @@ body {
   border-left: 5px solid #00aaff; align-self: flex-start;
 }
 
-/* 1. Profile: Atas, 1/4 Layar */
 .panel-top {
   top: 0; left: -10vw; width: 120vw; height: 25vh;
   border-bottom: 10px solid #00aaff;
@@ -57,7 +56,6 @@ body {
 .panel-top.show { transform: skew(-15deg) translateY(0); }
 .panel-top .card-content { padding: 3vh 15vw; justify-content: center; }
 
-/* 2. Mission Log: Kiri */
 .panel-left {
   top: 0; left: -15vw; width: 45vw; height: 100vh;
   border-right: 10px solid #00aaff;
@@ -66,7 +64,6 @@ body {
 .panel-left.show { transform: skew(-15deg) translateX(0); }
 .panel-left .card-content { padding: 40px 40px 40px 18vw; }
 
-/* 3. Social Stats: Bawah */
 .panel-bottom-stats {
   bottom: 0; left: -10vw; width: 120vw; min-height: 40vh;
   border-top: 10px solid #00aaff;
@@ -75,14 +72,12 @@ body {
 .panel-bottom-stats.show { transform: skew(-15deg) translateY(0); }
 .panel-bottom-stats .card-content { padding: 40px 15vw; justify-content: center; }
 
-/* 4. Social Link: Bawah */
 .panel-bottom {
   bottom: 0; left: -10vw; width: 120vw; min-height: 20vh;
   border-top: 10px solid #00aaff;
   transform: skew(-15deg) translateY(150%);
 }
 .panel-bottom.show { transform: skew(-15deg) translateY(0); }
-/* Diubah jadi row agar judul berdampingan dengan link */
 .panel-bottom .card-content { 
   padding: 20px 15vw; align-items: center; justify-content: center; 
   flex-direction: row; gap: 40px; 
@@ -90,7 +85,6 @@ body {
 .panel-bottom .title { margin-bottom: 0; align-self: center; }
 .panel-bottom .contact-list { display: flex; flex-direction: row-reverse; gap: 15px; flex-wrap: wrap; justify-content: center; }
 
-/* --- Tombol Back Icon Kurus & Tipis --- */
 button.back-btn { 
   background: transparent; color: #00aaff; border: none; 
   cursor: pointer; transition: 0.3s; 
@@ -100,7 +94,7 @@ button.back-btn {
 }
 button.back-btn:hover { color: #fff; transform: scale(1.15); text-shadow: 0 0 10px #00aaff; }
 
-/* --- 4. HEADPHONE & MUSIC PANEL --- */
+/* --- 4. HEADPHONE & GALLERY BUTTON --- */
 .headphone-toggle {
   position: fixed; bottom: 25px; right: 25px;
   z-index: 200; background: #fff; color: #000; width: 55px; height: 55px; border-radius: 50%;
@@ -109,6 +103,17 @@ button.back-btn:hover { color: #fff; transform: scale(1.15); text-shadow: 0 0 10
 }
 .headphone-toggle.rotating { transform: rotate(360deg); background: #00aaff; color: #fff; }
 
+.gallery-toggle {
+  position: fixed; bottom: 95px; right: 25px; /* Posisinya pas di atas headphone */
+  z-index: 200; background: #fff; color: #000; width: 55px; height: 55px; border-radius: 50%;
+  display: flex; justify-content: center; align-items: center; cursor: pointer;
+  box-shadow: 4px 4px 0px #8d6e63; transition: 0.5s; font-size: 1.5rem;
+}
+.gallery-toggle:hover {
+  background: #8d6e63; color: #fff; transform: scale(1.1); box-shadow: 4px 4px 0px #fff;
+}
+
+/* --- MUSIC PANEL --- */
 .music-panel {
   position: fixed; top: 0; right: -15vw; z-index: 300; background: #fff; 
   width: 40vw; height: 100vh; transform-origin: top right;
@@ -175,7 +180,7 @@ button.back-btn:hover { color: #fff; transform: scale(1.15); text-shadow: 0 0 10
 /* --- 7. READER ONLINE --- */
 .p3r-overlay-center {
   display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-  background: rgba(0, 0, 0, 0.8); z-index: 1000; justify-content: center; align-items: center;
+  background: rgba(0, 0, 0, 0.85); z-index: 1000; justify-content: center; align-items: center;
 }
 .reader-container {
   width: 90vw; height: 90vh; background: #000; border: 4px solid #fff; display: flex; flex-direction: column; box-shadow: 0 0 50px rgba(0, 170, 255, 0.5);
@@ -187,6 +192,81 @@ button.back-btn:hover { color: #fff; transform: scale(1.15); text-shadow: 0 0 10
 .reader-close:hover { background: #fff; color: #000; }
 .iframe-wrapper { flex-grow: 1; background: #fff; position: relative; }
 #novel-iframe { width: 100%; height: 100%; border: none; }
+
+/* --- 9. ART GALLERY & 3D BOOK (UPDATED) --- */
+/* My Art */
+.book-scene {
+  width: 100%; height: 100%;
+  display: flex; justify-content: center; align-items: center;
+  perspective: 2000px;
+}
+.book {
+  /* Diubah jadi lebih gede dan proporsional ala buku beneran */
+  width: 75vw; max-width: 950px; height: 85vh;
+  position: relative; transform-style: preserve-3d;
+  transition: transform 1s cubic-bezier(0.25, 1, 0.35, 1);
+  cursor: pointer;
+}
+.book.is-open { transform: translateX(15vw); cursor: default; }
+
+.book-cover {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  transform-style: preserve-3d; transform-origin: left center;
+  transition: transform 1.2s cubic-bezier(0.25, 1, 0.35, 1);
+  z-index: 3;
+}
+.book.is-open .book-cover { transform: rotateY(-160deg); pointer-events: none; }
+
+.cover-front, .cover-back {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  backface-visibility: hidden;
+  border-radius: 5px 20px 20px 5px;
+}
+.cover-front {
+  background: #4e342e; border: 8px solid #271410;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  color: #d7ccc8;
+  box-shadow: inset 10px 0 30px rgba(0,0,0,0.5), 15px 15px 40px rgba(0,0,0,0.8);
+}
+.cover-back {
+  background: #3e2723; border: 8px solid #271410;
+  transform: rotateY(180deg);
+  box-shadow: inset -10px 0 30px rgba(0,0,0,0.5);
+}
+
+.book-page {
+  position: absolute; top: 2%; left: 0; width: 98%; height: 96%;
+  background: #f4ecd8; border-radius: 2px 15px 15px 2px;
+  box-shadow: inset -5px 0 20px rgba(0,0,0,0.1), 10px 10px 20px rgba(0,0,0,0.4);
+  z-index: 1; padding: 30px; box-sizing: border-box; overflow-y: auto; overflow-x: hidden;
+}
+.book-page::-webkit-scrollbar { width: 8px; }
+.book-page::-webkit-scrollbar-thumb { background: #3e2723; border-radius: 10px; }
+
+/* Bookmark Close Button */
+.bookmark-close {
+  position: absolute; top: -5px; left: 20px;
+  width: 40px; height: 60px; background: #c62828; color: #fff;
+  display: flex; justify-content: center; align-items: center;
+  cursor: pointer; z-index: 10;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%);
+  box-shadow: 2px 2px 10px rgba(0,0,0,0.4);
+  transition: transform 0.3s ease; padding-bottom: 10px; font-size: 1.2rem;
+}
+.bookmark-close:hover {
+  transform: translateY(-5px); background: #e53935;
+}
+
+.gallery-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px; padding-top: 15px;
+}
+.gallery-grid img {
+  width: 100%; height: 200px; object-fit: cover;
+  border: 4px solid #fff; box-shadow: 4px 4px 12px rgba(0,0,0,0.3);
+  transition: 0.3s ease; cursor: pointer;
+}
+.gallery-grid img:hover { transform: scale(1.05); border-color: #00aaff; }
 
 /* --- 8. MOBILE RESPONSIVE --- */
 @media (max-width: 600px) {
@@ -201,6 +281,13 @@ button.back-btn:hover { color: #fff; transform: scale(1.15); text-shadow: 0 0 10
   
   .panel-top { height: auto; min-height: 35vh; }
   .panel-bottom { height: auto; min-height: 30vh; }
-  .panel-bottom .card-content { flex-direction: column; gap: 15px; } /* Kembalikan ke column di mobile agar tidak sempit */
+  .panel-bottom .card-content { flex-direction: column; gap: 15px; }
   .panel-bottom .contact-list { flex-direction: column; }
+  
+  /* Gallery Mobile adjustments */
+  .book { width: 90vw; height: 80vh; }
+  .book.is-open { transform: translateX(0); }
+  /* Biar cover gak ngehalangin di layar hp yang sempit pas dibuka */
+  .book.is-open .book-cover { transform: rotateY(-180deg); opacity: 0; }
+  .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
 }
